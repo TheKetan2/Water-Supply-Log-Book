@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Panchayat Water Monitor",
+    "slug": "panchayat-water-monitor",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./icon-512.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./icon-512.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1565c0"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./icon-512.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION", "POST_NOTIFICATIONS"],
+      "package": "com.panchayat.watermonitor"
+    },
+    "plugins": [
+      "expo-notifications",
+      "expo-location",
+      "expo-image-picker"
+    ]
+  }
+}

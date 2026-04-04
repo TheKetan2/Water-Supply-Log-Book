@@ -16,6 +16,8 @@ export default function NewEntryScreen({
   onReset,
   gpData = []
 }) {
+  const safeGPData = Array.isArray(gpData) ? gpData : [];
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContent}>
       <View style={styles.card}>
@@ -26,24 +28,24 @@ export default function NewEntryScreen({
 
         <FieldLabel text="Gram Panchayat / ग्रामपंचायत" />
         <CardSelect
-          options={gpData.map((g) => g.id)}
+          options={safeGPData.map((g) => g.id)}
           selectedValue={form.gpId}
           onValueChange={(val) => {
             onChange("gpId", val);
             onChange("villageId", "");
           }}
-          labels={Object.fromEntries(gpData.map((g) => [g.id, g.name]))}
+          labels={Object.fromEntries(safeGPData.map((g) => [g.id, g.name]))}
         />
 
         {form.gpId ? (
           <>
             <FieldLabel text="Select Village / गाव निवडा" />
             <CardSelect
-              options={gpData.find((g) => g.id === form.gpId)?.villages.map((v) => v.id) || []}
+              options={safeGPData.find((g) => g.id === form.gpId)?.villages?.map((v) => v.id) || []}
               selectedValue={form.villageId}
               onValueChange={(val) => onChange("villageId", val)}
               labels={Object.fromEntries(
-                (gpData.find((g) => g.id === form.gpId)?.villages || []).map((v) => [v.id, v.name])
+                (safeGPData.find((g) => g.id === form.gpId)?.villages || []).map((v) => [v.id, v.name])
               )}
             />
           </>

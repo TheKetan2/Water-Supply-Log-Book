@@ -9,6 +9,8 @@ export const createEmptyForm = () => ({
   duration: "",
   wardArea: "",
   waterAdequate: "",
+  pressureLevel: "",
+  issueDescription: "",
   reason: "",
   gpId: "",
   villageId: "",

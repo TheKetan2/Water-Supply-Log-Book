@@ -11,19 +11,33 @@
       "resizeMode": "contain",
       "backgroundColor": "#1565c0"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./icon-512.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION", "POST_NOTIFICATIONS"],
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ],
       "package": "com.panchayat.watermonitor"
     },
     "plugins": [
       "expo-notifications",
       "expo-location",
       "expo-image-picker"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "52f00861-460e-416c-8bc7-7bd459162be3"
+      }
+    }
   }
 }

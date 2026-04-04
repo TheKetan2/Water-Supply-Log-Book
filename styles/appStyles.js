@@ -135,10 +135,10 @@ export const styles = StyleSheet.create({
   },
   tabButton: { flex: 1, alignItems: "center", justifyContent: "center" },
   tabPill: {
-    paddingHorizontal: 20,
-    paddingVertical: 4,
-    borderRadius: 16,
-    marginBottom: 4,
+    flexDirection: "row",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
     alignItems: "center",
     justifyContent: "center"
   },

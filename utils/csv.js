@@ -1,8 +1,10 @@
-﻿export const escapeCsv = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+export const escapeCsv = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
 
-export const buildEntriesCsv = (entries) => {
+export const buildEntriesCsv = (entries, gpData = []) => {
   const headers = [
     "Date",
+    "Gram Panchayat",
+    "Village Name",
     "Scheme Type",
     "Water Released",
     "Start Time",
@@ -15,13 +17,20 @@ export const buildEntriesCsv = (entries) => {
     "Reason",
     "Latitude",
     "Longitude",
-    "Photo Base64",
     "Created At"
   ];
 
-  const lines = entries.map((entry) =>
-    [
+  const lines = entries.map((entry) => {
+    // Lookup Names from IDs
+    const gp = gpData.find((g) => g.id === entry.gpId);
+    const village = gp?.villages?.find((v) => v.id === entry.villageId);
+    const gpName = gp?.name || "N/A";
+    const villageName = village?.name || entry.villageName || "N/A";
+
+    return [
       entry.date,
+      gpName,
+      villageName,
       entry.schemeType,
       entry.waterReleased,
       entry.startTime,
@@ -34,12 +43,11 @@ export const buildEntriesCsv = (entries) => {
       entry.reason,
       entry.latitude,
       entry.longitude,
-      entry.photoBase64,
       entry.createdAt
     ]
       .map(escapeCsv)
-      .join(",")
-  );
+      .join(",");
+  });
 
   return [headers.map(escapeCsv).join(","), ...lines].join("\n");
 };

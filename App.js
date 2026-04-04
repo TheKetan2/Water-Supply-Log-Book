@@ -124,7 +124,7 @@ export default function App() {
 
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.7,
+      quality: 0.4,
       base64: true
     });
 
@@ -171,9 +171,9 @@ export default function App() {
 
     const newEntry = {
       ...form,
-      wardArea: form.wardArea.trim(),
-      issueDescription: form.issueDescription.trim(),
-      reason: form.reason.trim(),
+      wardArea: (form.wardArea || "").trim(),
+      issueDescription: (form.issueDescription || "").trim(),
+      reason: (form.reason || "").trim(),
       createdAt: new Date().toISOString()
     };
 
@@ -186,6 +186,13 @@ export default function App() {
     setActiveTab("Records");
   };
 
+  const deleteEntry = async (createdAt) => {
+    const nextEntries = entries.filter((e) => e.createdAt !== createdAt);
+    setEntries(nextEntries);
+    await saveEntries(nextEntries);
+    setToast("Record Deleted");
+  };
+
   const exportCsv = async () => {
     if (!entries.length) {
       Alert.alert("No data", "No entries available to export.");
@@ -193,20 +200,24 @@ export default function App() {
     }
 
     try {
-      const csv = buildEntriesCsv(entries);
-      const path = `${FileSystem.cacheDirectory}panchayat-water-log.csv`;
+      const csv = buildEntriesCsv(entries, gpData);
+      const filename = `water_supply_log_${new Date().toISOString().split('T')[0]}.csv`;
+      const path = `${FileSystem.cacheDirectory}${filename}`;
+      
       await FileSystem.writeAsStringAsync(path, csv, { encoding: FileSystem.EncodingType.UTF8 });
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(path, {
           mimeType: "text/csv",
-          dialogTitle: "Export Water Log CSV"
+          dialogTitle: "Export Water Supply Log",
+          UTI: "public.comma-separated-values-text"
         });
       } else {
-        Alert.alert("Exported", `CSV saved at: ${path}`);
+        Alert.alert("Export Error", "Sharing is not available on this device.");
       }
-    } catch {
-      Alert.alert("Export failed", "Could not export CSV.");
+    } catch (error) {
+      console.error("CSV Export Failure:", error);
+      Alert.alert("Export Failed", "Could not create CSV file. Please check device permissions.");
     }
   };
 
@@ -270,7 +281,7 @@ export default function App() {
 
   const renderScreen = () => {
     if (activeTab === "Dashboard") {
-      return <DashboardScreen stats={dashboardStats} />;
+      return <DashboardScreen stats={dashboardStats} gpData={gpData} entries={entries} />;
     }
 
     if (activeTab === "New Entry") {
@@ -293,7 +304,14 @@ export default function App() {
     }
 
     if (activeTab === "Records") {
-      return <RecordsScreen entries={entries} onExport={exportToCSV} gpData={gpData} />;
+      return (
+        <RecordsScreen
+          entries={entries}
+          onExport={exportCsv}
+          gpData={gpData}
+          onDelete={deleteEntry}
+        />
+      );
     }
 
     return (

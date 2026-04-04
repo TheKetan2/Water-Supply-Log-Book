@@ -32,7 +32,9 @@
     "plugins": [
       "expo-notifications",
       "expo-location",
-      "expo-image-picker"
+      "expo-image-picker",
+      "expo-font",
+      "expo-asset"
     ],
     "extra": {
       "eas": {

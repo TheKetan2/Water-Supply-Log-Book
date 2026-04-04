@@ -1,8 +1,13 @@
-﻿import React from "react";
+import React from "react";
 import { Image, Text, View } from "react-native";
 import { styles } from "../styles/appStyles";
 
-export default function EntryCard({ item }) {
+export default function EntryCard({ item, gpData = [] }) {
+  const gp = gpData.find((g) => g.id === item.gpId);
+  const village = gp?.villages.find((v) => v.id === item.villageId);
+
+  const displayName = gp && village ? `${gp.name} - ${village.name}` : item.villageName || "Unknown Village";
+
   return (
     <View style={styles.recordCard}>
       <View style={styles.rowBetween}>
@@ -11,6 +16,7 @@ export default function EntryCard({ item }) {
           {item.waterReleased}
         </Text>
       </View>
+      <Text style={[styles.recordText, { fontWeight: "700", color: "#1565c0" }]}>{displayName}</Text>
       <Text style={styles.recordText}>Scheme: {item.schemeType}</Text>
       <Text style={styles.recordText}>Ward: {item.wardArea}</Text>
       <Text style={styles.recordText}>GPS: {item.latitude}, {item.longitude}</Text>

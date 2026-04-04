@@ -62,22 +62,47 @@ export default function App() {
     const todayEntries = entries.filter((entry) => entry.date === today);
     const todayStatus = todayEntries.some((entry) => entry.waterReleased === "Yes") ? "Yes / होय" : "No / नाही";
 
-    const todayDate = new Date();
-    const last7Start = new Date(todayDate);
-    last7Start.setDate(todayDate.getDate() - 6);
-    const startKey = `${last7Start.getFullYear()}-${String(last7Start.getMonth() + 1).padStart(2, "0")}-${String(
-      last7Start.getDate()
-    ).padStart(2, "0")}`;
+    const last7DaysList = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    });
 
-    const last7 = entries.filter((entry) => entry.date >= startKey && entry.date <= today);
-    const noWaterCount = new Set(last7.filter((entry) => entry.waterReleased === "No").map((entry) => entry.date)).size;
+    const last7 = entries.filter((entry) => last7DaysList.includes(entry.date));
+    const waterReleasedDays = new Set(last7.filter((entry) => entry.waterReleased === "Yes").map((entry) => entry.date)).size;
+
+    // GP Infrastructure Stats (Aggregated across all GPs)
+    let totalPopulation = 0;
+    let totalWells = 0;
+    let totalBorewells = 0;
+    let totalPumps = 0;
+    let totalRO = 0;
+    let totalVillages = 0;
+
+    gpData?.forEach((gp) => {
+      totalVillages += gp.villages?.length || 0;
+      gp.villages?.forEach((v) => {
+        totalPopulation += parseInt(v.population || 0, 10);
+        totalWells += parseInt(v.wells || 0, 10);
+        totalBorewells += parseInt(v.borewells || 0, 10);
+        totalPumps += parseInt(v.solarPumps || 0, 10);
+        if (v.roPresent === "Yes") totalRO += 1;
+      });
+    });
 
     return {
       todayStatus,
       last7Count: last7.length,
-      noWaterCount
+      waterReleasedDays,
+      totalGPs: gpData?.length || 0,
+      totalVillages,
+      totalPopulation,
+      totalWells,
+      totalBorewells,
+      totalPumps,
+      roCoverage: totalVillages ? Math.round((totalRO / totalVillages) * 100) : 0
     };
-  }, [entries]);
+  }, [entries, gpData]);
 
   const hydrate = async () => {
     const [loadedEntries, loadedReminder, loadedGP] = await Promise.all([loadEntries(), loadReminder(), loadGPData()]);
@@ -258,6 +283,7 @@ export default function App() {
           onCaptureGps={captureGps}
           onSubmit={submitEntry}
           onReset={resetForm}
+          gpData={gpData}
         />
       );
     }
@@ -267,7 +293,7 @@ export default function App() {
     }
 
     if (activeTab === "Records") {
-      return <RecordsScreen entries={entries} onExport={exportCsv} />;
+      return <RecordsScreen entries={entries} onExport={exportToCSV} gpData={gpData} />;
     }
 
     return (

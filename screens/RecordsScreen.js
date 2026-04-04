@@ -4,7 +4,7 @@ import ActionButton from "../components/ActionButton";
 import EntryCard from "../components/EntryCard";
 import { styles } from "../styles/appStyles";
 
-export default function RecordsScreen({ entries, onExport }) {
+export default function RecordsScreen({ entries, onExport, gpData }) {
   return (
     <View style={styles.recordsContainer}>
       <View style={styles.recordsHeader}>
@@ -14,7 +14,7 @@ export default function RecordsScreen({ entries, onExport }) {
       <FlatList
         data={entries}
         keyExtractor={(item) => item.createdAt}
-        renderItem={({ item }) => <EntryCard item={item} />}
+        renderItem={({ item }) => <EntryCard item={item} gpData={gpData} />}
         ListEmptyComponent={<Text style={styles.emptyText}>No entries yet.</Text>}
         contentContainerStyle={styles.listContent}
       />

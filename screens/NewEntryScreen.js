@@ -6,7 +6,16 @@ import FieldLabel from "../components/FieldLabel";
 import { PRESSURE_OPTIONS, SCHEME_OPTIONS, YES_NO_OPTIONS } from "../constants/options";
 import { styles } from "../styles/appStyles";
 
-export default function NewEntryScreen({ form, message, onChange, onCapturePhoto, onCaptureGps, onSubmit, onReset }) {
+export default function NewEntryScreen({
+  form,
+  message,
+  onChange,
+  onCapturePhoto,
+  onCaptureGps,
+  onSubmit,
+  onReset,
+  gpData = []
+}) {
   return (
     <ScrollView contentContainerStyle={styles.scrollContent}>
       <View style={styles.card}>
@@ -15,8 +24,30 @@ export default function NewEntryScreen({ form, message, onChange, onCapturePhoto
         <FieldLabel text="Date / तारीख" />
         <TextInput value={form.date} onChangeText={(text) => onChange("date", text)} placeholder="YYYY-MM-DD" style={styles.input} />
 
-        <FieldLabel text="Village Name / गावाचे नाव" />
-        <TextInput value={form.villageName} onChangeText={(text) => onChange("villageName", text)} style={styles.input} />
+        <FieldLabel text="Gram Panchayat / ग्रामपंचायत" />
+        <CardSelect
+          options={gpData.map((g) => g.id)}
+          selectedValue={form.gpId}
+          onValueChange={(val) => {
+            onChange("gpId", val);
+            onChange("villageId", "");
+          }}
+          labels={Object.fromEntries(gpData.map((g) => [g.id, g.name]))}
+        />
+
+        {form.gpId ? (
+          <>
+            <FieldLabel text="Select Village / गाव निवडा" />
+            <CardSelect
+              options={gpData.find((g) => g.id === form.gpId)?.villages.map((v) => v.id) || []}
+              selectedValue={form.villageId}
+              onValueChange={(val) => onChange("villageId", val)}
+              labels={Object.fromEntries(
+                (gpData.find((g) => g.id === form.gpId)?.villages || []).map((v) => [v.id, v.name])
+              )}
+            />
+          </>
+        ) : null}
 
         <FieldLabel text="Scheme Type / योजना" />
         <CardSelect

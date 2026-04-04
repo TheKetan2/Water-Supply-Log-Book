@@ -9,10 +9,9 @@ export const createEmptyForm = () => ({
   duration: "",
   wardArea: "",
   waterAdequate: "",
-  pressureLevel: "",
-  issueDescription: "",
   reason: "",
-  villageName: "",
+  gpId: "",
+  villageId: "",
   photoBase64: "",
   latitude: "",
   longitude: ""
@@ -25,8 +24,9 @@ export const validateEntryForm = (form, entries) => {
   if (!form.startTime) return "Start Time is required.";
   if (!form.endTime) return "End Time is required.";
   if (!form.duration || form.duration === "Invalid time range") return "Provide valid Start/End time.";
+  if (!form.gpId) return "GP Selection is required.";
+  if (!form.villageId) return "Village Selection is required.";
   if (!form.wardArea.trim()) return "Ward / Area is required.";
-  if (!form.villageName.trim()) return "Village Name is required.";
   if (!form.waterAdequate) return "Water Adequate is required.";
   if (!form.pressureLevel) return "Pressure Level is required.";
   if (form.waterReleased === "No" && !form.reason.trim()) return "Reason is mandatory when Water Released = No.";

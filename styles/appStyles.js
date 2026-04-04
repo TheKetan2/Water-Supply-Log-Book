@@ -167,5 +167,20 @@ export const styles = StyleSheet.create({
     shadowRadius: 4
   },
   toastIcon: { color: "#4caf50", fontSize: 18, fontWeight: "bold", marginRight: 10 },
-  toastText: { color: "#ffffff", fontSize: 14, fontWeight: "600" }
+  toastText: { color: "#ffffff", fontSize: 14, fontWeight: "600" },
+  gridRow: { flexDirection: "row", gap: 10, marginTop: 10 },
+  infoCard: { flex: 1, padding: 15, borderRadius: 16, alignItems: "center", justifyContent: "center" },
+  infoCardBlue: { backgroundColor: "#e3f2fd", borderWidth: 1, borderColor: "#bbdefb" },
+  infoCardGreen: { backgroundColor: "#e8f5e9", borderWidth: 1, borderColor: "#c8e6c9" },
+  infoCardAmber: { backgroundColor: "#fff8e1", borderWidth: 1, borderColor: "#ffecb3" },
+  infoCardPurple: { backgroundColor: "#f3e5f5", borderWidth: 1, borderColor: "#e1bee7" },
+  infoLabel: { fontSize: 12, color: "#546e7a", fontWeight: "600", marginBottom: 4 },
+  infoValue: { fontSize: 22, fontWeight: "800", color: "#263238" },
+  banner: { padding: 16, borderRadius: 16, marginBottom: 15, alignItems: "center" },
+  bannerSuccess: { backgroundColor: "#4caf50" },
+  bannerWarning: { backgroundColor: "#ff9800" },
+  bannerText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  progressContainer: { height: 10, backgroundColor: "#f0f0f0", borderRadius: 5, overflow: "hidden", marginTop: 8 },
+  progressBar: { height: "100%", backgroundColor: "#2196f3" },
+  sectionHeader: { fontSize: 14, fontWeight: "700", color: "#1565c0", marginTop: 20, marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }
 });

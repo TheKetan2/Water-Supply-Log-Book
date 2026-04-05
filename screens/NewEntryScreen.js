@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Image, ScrollView, Text, TextInput, View } from "react-native";
 import ActionButton from "../components/ActionButton";
 import CardSelect from "../components/CardSelect";
@@ -14,19 +14,34 @@ export default function NewEntryScreen({
   onCaptureGps,
   onSubmit,
   onReset,
-  gpData = []
+  gpData = [],
+  language,
+  t
 }) {
   const safeGPData = Array.isArray(gpData) ? gpData : [];
+
+  const gpLabels = useMemo(() => {
+    const labels = {};
+    safeGPData.forEach(g => { labels[g.id] = g.name; });
+    return labels;
+  }, [safeGPData]);
+
+  const villageLabels = useMemo(() => {
+    const labels = {};
+    const currentGP = safeGPData.find(g => g.id === form.gpId);
+    currentGP?.villages?.forEach(v => { labels[v.id] = v.name; });
+    return labels;
+  }, [safeGPData, form.gpId]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContent}>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>New Entry / नवीन नोंद</Text>
+        <Text style={styles.cardTitle}>{t("tabNewEntry")}</Text>
 
-        <FieldLabel text="Date / तारीख" />
+        <FieldLabel text="Date" />
         <TextInput value={form.date} onChangeText={(text) => onChange("date", text)} placeholder="YYYY-MM-DD" style={styles.input} />
 
-        <FieldLabel text="Gram Panchayat / ग्रामपंचायत" />
+        <FieldLabel text={t("labelGP")} />
         <CardSelect
           options={safeGPData.map((g) => g.id)}
           selectedValue={form.gpId}
@@ -34,81 +49,79 @@ export default function NewEntryScreen({
             onChange("gpId", val);
             onChange("villageId", "");
           }}
-          labels={Object.fromEntries(safeGPData.map((g) => [g.id, g.name]))}
+          labels={gpLabels}
         />
 
         {form.gpId ? (
           <>
-            <FieldLabel text="Select Village / गाव निवडा" />
+            <FieldLabel text={t("labelVillage")} />
             <CardSelect
               options={safeGPData.find((g) => g.id === form.gpId)?.villages?.map((v) => v.id) || []}
               selectedValue={form.villageId}
               onValueChange={(val) => onChange("villageId", val)}
-              labels={Object.fromEntries(
-                (safeGPData.find((g) => g.id === form.gpId)?.villages || []).map((v) => [v.id, v.name])
-              )}
+              labels={villageLabels}
             />
           </>
         ) : null}
 
-        <FieldLabel text="Scheme Type / योजना" />
+        <FieldLabel text={t("labelScheme")} />
         <CardSelect
           options={SCHEME_OPTIONS}
           selectedValue={form.schemeType}
           onValueChange={(value) => onChange("schemeType", value)}
           labels={{
-            "Independent Water Supply": "Independent / स्वतंत्र",
-            "Grid Water Supply": "Grid / ग्रीड"
+            "Independent Water Supply": language === "mr" ? "स्वतंत्र" : "Independent",
+            "Grid Water Supply": language === "mr" ? "ग्रीड" : "Grid"
           }}
         />
 
-        <FieldLabel text="Water Released? / पाणी सोडले?" />
+        <FieldLabel text={t("labelWaterReleased")} />
         <CardSelect
           options={YES_NO_OPTIONS}
           selectedValue={form.waterReleased}
           onValueChange={(value) => onChange("waterReleased", value)}
           labels={{
-            Yes: "Yes / होय",
-            No: "No / नाही"
+            Yes: t("yes"),
+            No: t("no")
           }}
         />
 
-        <FieldLabel text="Start Time / सुरुवात" />
+        <FieldLabel text={t("labelStartTime")} />
         <TextInput value={form.startTime} onChangeText={(text) => onChange("startTime", text)} placeholder="HH:MM" style={styles.input} />
 
-        <FieldLabel text="End Time / समाप्ती" />
+        <FieldLabel text={t("labelEndTime")} />
         <TextInput value={form.endTime} onChangeText={(text) => onChange("endTime", text)} placeholder="HH:MM" style={styles.input} />
 
-        <FieldLabel text="Duration / कालावधी" />
+        <FieldLabel text={t("labelDuration")} />
         <TextInput value={form.duration} editable={false} style={[styles.input, styles.readOnly]} />
 
-        <FieldLabel text="Ward / Area / वॉर्ड" />
+        <FieldLabel text={t("labelWardArea")} />
         <TextInput value={form.wardArea} onChangeText={(text) => onChange("wardArea", text)} style={styles.input} />
 
-        <FieldLabel text="Water Adequate? / पुरेसे?" />
+        <FieldLabel text={t("labelAdequacy")} />
         <CardSelect
           options={YES_NO_OPTIONS}
           selectedValue={form.waterAdequate}
           onValueChange={(value) => onChange("waterAdequate", value)}
           labels={{
-            Yes: "Yes / होय",
-            No: "No / नाही"
+            Yes: t("yes"),
+            No: t("no")
           }}
         />
 
-        <FieldLabel text="Pressure Level / दाब" />
+        <FieldLabel text={t("labelPressure")} />
         <CardSelect
           options={PRESSURE_OPTIONS}
           selectedValue={form.pressureLevel}
           onValueChange={(value) => onChange("pressureLevel", value)}
           labels={{
-            Low: "Low / कमी",
-            Medium: "Medium / मध्यम",
-            High: "High / जास्त"
+            Low: language === "mr" ? "कमी" : "Low",
+            Medium: language === "mr" ? "मध्यम" : "Medium",
+            High: language === "mr" ? "जास्त" : "High"
           }}
         />
 
-        <FieldLabel text="Issue Description / समस्या" />
+        <FieldLabel text={t("labelIssueDescription")} />
         <TextInput
           value={form.issueDescription}
           onChangeText={(text) => onChange("issueDescription", text)}
@@ -117,7 +130,7 @@ export default function NewEntryScreen({
           style={[styles.input, styles.textArea]}
         />
 
-        <FieldLabel text="Reason (No असल्यास आवश्यक) / कारण" />
+        <FieldLabel text={t("labelReason")} />
         <TextInput
           value={form.reason}
           onChangeText={(text) => onChange("reason", text)}
@@ -127,8 +140,8 @@ export default function NewEntryScreen({
         />
 
         <View style={styles.buttonRow}>
-          <ActionButton title="Capture Photo / फोटो" onPress={onCapturePhoto} />
-          <ActionButton title="Capture GPS / GPS" onPress={onCaptureGps} secondary />
+          <ActionButton title="Take Photo" onPress={onCapturePhoto} style={styles.actionFlex} />
+          <ActionButton title={t("btnCaptureGPS")} onPress={onCaptureGps} secondary style={styles.actionFlex} />
         </View>
 
         {form.photoBase64 ? <Image source={{ uri: form.photoBase64 }} style={styles.preview} /> : null}
@@ -137,8 +150,8 @@ export default function NewEntryScreen({
         {message.text ? <Text style={message.type === "error" ? styles.errorText : styles.successText}>{message.text}</Text> : null}
 
         <View style={styles.buttonRow}>
-          <ActionButton title="Submit Entry" onPress={onSubmit} />
-          <ActionButton title="Reset" onPress={onReset} secondary />
+          <ActionButton title={t("btnSubmit")} onPress={onSubmit} style={styles.actionFlex} />
+          <ActionButton title={t("btnReset")} onPress={onReset} secondary style={styles.actionFlex} />
         </View>
       </View>
     </ScrollView>

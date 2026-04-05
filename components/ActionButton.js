@@ -9,7 +9,7 @@ export default function ActionButton({ title, onPress, secondary, small, style }
       style={[
         styles.actionButton,
         secondary ? styles.actionSecondary : styles.actionPrimary,
-        small ? styles.actionSmall : { minHeight: 48, width: '100%' },
+        small ? styles.actionSmall : { minHeight: 48 },
         style
       ]}
     >

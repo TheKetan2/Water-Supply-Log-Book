@@ -6,7 +6,10 @@ export const styles = StyleSheet.create({
     backgroundColor: "#1565c0",
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "android" ? 12 : 8,
-    paddingBottom: 12
+    paddingBottom: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   headerTitle: { color: "#fff", fontSize: 18, fontWeight: "700" },
   headerSubtitle: { color: "#d8eaff", marginTop: 2, fontSize: 13 },
@@ -182,5 +185,79 @@ export const styles = StyleSheet.create({
   bannerText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   progressContainer: { height: 10, backgroundColor: "#f0f0f0", borderRadius: 5, overflow: "hidden", marginTop: 8 },
   progressBar: { height: "100%", backgroundColor: "#2196f3" },
-  sectionHeader: { fontSize: 14, fontWeight: "700", color: "#1565c0", marginTop: 20, marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }
+  sectionHeader: { fontSize: 14, fontWeight: "700", color: "#1565c0", marginTop: 20, marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 },
+  counterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f0f5fc",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#c6d8ed",
+    overflow: "hidden"
+  },
+  counterButton: {
+    width: 40,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#e1eaf7"
+  },
+  counterButtonText: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#1565c0"
+  },
+  counterValue: {
+    flex: 1,
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1c3551",
+    paddingVertical: 8
+  },
+  fieldRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 10
+  },
+  fieldCol: {
+    flex: 1
+  },
+  aboutFooter: {
+    marginTop: 35,
+    paddingVertical: 20,
+    alignItems: "center",
+    borderTopWidth: 1,
+    borderTopColor: "#eceff1"
+  },
+  aboutText: {
+    color: "#b0bec5",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.5
+  },
+  langToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 8,
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.4)"
+  },
+  langToggleText: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: "rgba(255, 255, 255, 0.6)"
+  },
+  langToggleActive: {
+    color: "#fff",
+    fontWeight: "900"
+  },
+  langToggleDivider: {
+    marginHorizontal: 4,
+    color: "rgba(255, 255, 255, 0.3)",
+    fontSize: 10
+  }
 });

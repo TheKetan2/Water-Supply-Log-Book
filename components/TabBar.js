@@ -3,7 +3,7 @@ import { Pressable, Text, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from "../styles/appStyles";
 
-export default function TabBar({ tabs = [], activeTab, onChange }) {
+export default function TabBar({ tabs = [], activeTab, onChange, t }) {
   if (!tabs || tabs.length === 0) return null;
 
   return (
@@ -27,7 +27,7 @@ export default function TabBar({ tabs = [], activeTab, onChange }) {
               />
               {isActive && (
                 <Text numberOfLines={1} style={[styles.tabText, styles.tabTextActive, { marginLeft: 4 }]}>
-                  {tab.name}
+                  {t("tab" + tab.name.replace(/\s/g, ""))}
                 </Text>
               )}
             </View>
